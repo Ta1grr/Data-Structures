@@ -1,9 +1,12 @@
+from doubly_linked_list import ListNode
+from doubly_linked_list import DoublyLinkedList
+
 class Queue:
   def __init__(self):
     self.size = 0
     # what data structure should we
     # use to store queue elements?
-    self.storage = 
+    self.storage = DoublyLinkedList(self)
 
   def enqueue(self, item):
     pass
@@ -12,4 +15,4 @@ class Queue:
     pass
 
   def len(self):
-    pass
+    len(self.storage)

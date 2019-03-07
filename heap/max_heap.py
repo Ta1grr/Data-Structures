@@ -6,7 +6,7 @@ class Heap:
         # Max Heap: A[PARENT(i) ] ≥ A[i]
         # Min Heap: A[PARENT(i) ] ≤ A[i]
 
-    # Inserting a new value to the end of the list and then sift through the list accordingly to max heap
+    # Inserting a new value to the end of the list and then bubble upward through the list accordingly to max heap
     def insert(self, value):
         self.storage.append(value)
         return self._bubble_up(len(self.storage) - 1)
@@ -21,15 +21,18 @@ class Heap:
         this method needs to ensure that the heap property is maintained after 
         the top most element has been removed. """
     def delete(self):
+        self._bubble_up(len(self.storage) - 1)
         self.storage[0], self.storage[len(self.storage) - 1] = self.storage[len(self.storage) - 1], self.storage[0]
-        return self._sift_down(0)
+        Max = self.storage.pop()
+        self._sift_down(0)
+        return Max
 
         # -- Notes --
         #  Delete will swap the root node with the last node of the array, delete the last value and start sift stuff down 
 
     # Getting the largest number
     def get_max(self):
-        self._bubble_up(len(self.storage) - 1)
+        # self._bubble_up(len(self.storage) - 1)
         return self.storage[0]
 
         # Alternative way to get max value
@@ -50,8 +53,6 @@ class Heap:
 
     # Child Element bigger than the Parent (Insert)
     def _bubble_up(self, index):
-        # left_child = (index * 2) + 1
-        # right_child = (index * 2) + 2
         parent = (index - 1) // 2
         # Base case to break out of recursion 
         if index == 0 or self.storage[parent] > self.storage[index]:
@@ -74,29 +75,36 @@ class Heap:
         #       Bubble_up(self, old_parent_index)
 
 
-
     """ # Parent Element is smaller than children (Delete)
         # * `_sift_down` grabs the indices of this element's children and determines which child has a larger value. 
        If the larger child's value is larger than the parent's value, the child element is swapped with the parent."""
     def _sift_down(self, index):
+        # Formula to access certain index
         left_child = (index * 2) + 1
         right_child = (index * 2) + 2
-        parent = (index - 1) // 2
-        # if LC greater than length of array or RC greater than length of array
-        if left_child > len(self.storage) or right_child > len(self.storage):
+        # Base case to break out of the loop.
+        if left_child >= len(self.storage) or left_child is None:
+            return
+        elif right_child >= len(self.storage) or right_child is None:
             return
 
-        if self.storage[left_child] > self.storage[right_child]:
-            self.storage[left_child], self.storage[parent] = self.storage[parent], self.storage[left_child]
-            return self._sift_down(index)
-        else:
-            self.storage[right_child], self.storage[parent] = self.storage[parent], self.storage[right_child]
-            return self._sift_down(index)
+        # if the left child is larger or equal than to the right child
+        if self.storage[left_child] >= self.storage[right_child]:
+            # If the left child is greater than the index, swap.
+            if self.storage[left_child] > self.storage[index]:
+                self.storage[left_child], self.storage[index] = self.storage[index], self.storage[left_child]
+                return self._sift_down(left_child)
+                
+        # if the right child is greater than or equal to the left child 
+        if self.storage[right_child] >= self.storage[left_child]:
+            # If the right child is greater than index, swap
+            if self.storage[right_child] >= self.storage[index]:
+                self.storage[right_child], self.storage[index] = self.storage[index], self.storage[right_child]
+                return self._sift_down(right_child)
+        
 
         # Parent will compare with Child and swap if Parent is smaller
         
-
-
         # -- Notes --
         # To be sift down after inserting number
         # Swap parent with the largest child

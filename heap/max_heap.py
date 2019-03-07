@@ -21,22 +21,30 @@ class Heap:
         this method needs to ensure that the heap property is maintained after 
         the top most element has been removed. """
     def delete(self):
-        pass
+        self.storage[0], self.storage[len(self.storage) - 1] = self.storage[len(self.storage) - 1], self.storage[0]
+        return self._sift_down(0)
 
         # -- Notes --
         #  Delete will swap the root node with the last node of the array, delete the last value and start sift stuff down 
 
     # Getting the largest number
     def get_max(self):
-        max_value = self.storage[0]
-        for i in range(len(self.storage)):
-            if self.storage[i] > max_value:
-                max_value = self.storage[i]
-        return max_value
+        self._bubble_up(len(self.storage) - 1)
+        return self.storage[0]
+
+        # Alternative way to get max value
+        # max_value = self.storage[0]
+        # for i in range(len(self.storage)):
+        #     if self.storage[i] > max_value:
+        #         max_value = self.storage[i]
+        # return max_value
 
     # * `get_size` returns the number of elements stored in the heap.
     def get_size(self):
-        print(len(self.storage))
+        if not self.storage:
+            return 0
+        else:
+            return len(self.storage)
 
 
 
@@ -71,29 +79,31 @@ class Heap:
         # * `_sift_down` grabs the indices of this element's children and determines which child has a larger value. 
        If the larger child's value is larger than the parent's value, the child element is swapped with the parent."""
     def _sift_down(self, index):
+        left_child = (index * 2) + 1
+        right_child = (index * 2) + 2
+        parent = (index - 1) // 2
         # if LC greater than length of array or RC greater than length of array
-        pass
-            
+        if left_child > len(self.storage) or right_child > len(self.storage):
+            return
+
+        if self.storage[left_child] > self.storage[right_child]:
+            self.storage[left_child], self.storage[parent] = self.storage[parent], self.storage[left_child]
+            return self._sift_down(index)
+        else:
+            self.storage[right_child], self.storage[parent] = self.storage[parent], self.storage[right_child]
+            return self._sift_down(index)
+
+        # Parent will compare with Child and swap if Parent is smaller
+        
+
 
         # -- Notes --
         # To be sift down after inserting number
-        # Swap with the largest parent
+        # Swap parent with the largest child
 
         # 1. If element has no children, stop
         # 2. is element less than max child, swap
 
-
-heap = Heap()
-
-heap.insert(1)
-heap.insert(2)
-heap.insert(3)
-heap.insert(4)
-heap.insert(5)
-heap.insert(6)
-heap.insert(7)
-
-print(heap.get_size)
 
 
 # for (i = A.length/2; i >= 1; i--)
